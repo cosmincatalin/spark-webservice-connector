@@ -9,31 +9,27 @@ import org.apache.spark.sql.types.StructType
 import org.apache.spark.unsafe.types.UTF8String
 
 import scala.collection.JavaConverters.seqAsJavaListConverter
-import scala.io.{BufferedSource, Source}
+import scala.io.BufferedSource
 
 class DefaultSource extends DataSourceV2 with ReadSupport {
 
     override def createReader(options: DataSourceOptions): DataSourceReader = {
 
-        val protocol = options.get("protocol").orElse("https")
-        val host = options.get("host").orElse("localhost")
-        val port = options.getInt("port", 443)
-        val path = options.get("path").orElse("")
-        val method = options.get("method").orElse("GET")
+        val _options = WebServiceConnectorOptions(
+            options.get("protocol").orElse("https"),
+            options.get("host").orElse("localhost"),
+            options.getInt("port", 443),
+            options.get("path").orElse("/"),
+            options.get("method").orElse("GET")
+        )
 
-        WebSourceReader(Map(
-            "protocol" -> protocol,
-            "host" -> host,
-            "port" -> port.toString,
-            "path" -> path,
-            "method" -> method
-        ))
+        WebSourceReader(_options)
     }
 
 }
 
 
-case class WebSourceReader(options: Map[String, String]) extends DataSourceReader {
+case class WebSourceReader(options: WebServiceConnectorOptions) extends DataSourceReader {
 
     val _schema: StructType = new StructType().add("body", "string")
 
@@ -43,17 +39,17 @@ case class WebSourceReader(options: Map[String, String]) extends DataSourceReade
 
 }
 
-case class WebInputPartition(requiredSchema: StructType, options: Map[String, String]) extends InputPartition[InternalRow] {
+case class WebInputPartition(requiredSchema: StructType, options: WebServiceConnectorOptions) extends InputPartition[InternalRow] {
 
     override def createPartitionReader(): InputPartitionReader[InternalRow] = WebInputPartitionReader(requiredSchema, options)
 
 }
 
-case class WebInputPartitionReader(requiredSchema: StructType, options: Map[String, String]) extends InputPartitionReader[InternalRow] {
+case class WebInputPartitionReader(requiredSchema: StructType, options: WebServiceConnectorOptions) extends InputPartitionReader[InternalRow] {
 
     var _called: Boolean = false
     var _result: String = ""
-    val _url: String =  s"${options("protocol")}://${options("host")}:${options("port")}${options("path")}"
+    val _url: String =  s"${options.protocol}://${options.host}:${options.port.toString}${options.path}"
     val _source: BufferedSource = scala.io.Source.fromURL(_url)
 
     override def next(): Boolean = if (!_called) {
@@ -72,3 +68,5 @@ case class WebInputPartitionReader(requiredSchema: StructType, options: Map[Stri
 
     override def close(): Unit = _source.close()
 }
+
+case class WebServiceConnectorOptions(protocol: String, host: String, port: Int, path: String, method: String)
