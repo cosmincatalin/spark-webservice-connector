@@ -12,4 +12,7 @@ jobs:
     - name: sbt to Maven Central
       uses: cosmincatalin/sbt-to-maven-central@v1.0.0-1
       env:
-        FIRST_NAME: ${{ secrets.NEXUS_USER }}
+        NEXUS_USER: ${{ secrets.NEXUS_USER }}
+        NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
+        NEXUS_PK: ${{ secrets.NEXUS_PK }}
+        NEXUS_PASSPHRASE: ${{ secrets.NEXUS_PASSPHRASE }}
