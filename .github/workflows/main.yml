@@ -10,4 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: sbt to Maven Central
-      uses: cosmincatalin/sbt-to-maven-central@v1.0.1
+      uses: cosmincatalin/sbt-to-maven-central@v1.0.0-1
+      env:
+        FIRST_NAME  = "Mona"
+      secrets: ["NEXUS_USER"]
