@@ -1,0 +1,15 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v1
+    - name: sbt to Maven Central
+      uses: cosmincatalin/sbt-to-maven-central@v1.0.0-1
+      env:
+        FIRST_NAME: ${{ secrets.NEXUS_USER }}
