@@ -2,16 +2,21 @@ package com.cosminsanda.spark.webservice
 
 import java.util
 
+import org.apache.logging.log4j.{LogManager, Logger}
 import org.apache.spark.sql.catalyst.InternalRow
 import org.apache.spark.sql.sources.v2.reader.{DataSourceReader, InputPartition, InputPartitionReader}
 import org.apache.spark.sql.sources.v2.{DataSourceOptions, DataSourceV2, ReadSupport}
 import org.apache.spark.sql.types.StructType
+import com.cosminsanda.BuildInfo
 import org.apache.spark.unsafe.types.UTF8String
 
 import scala.collection.JavaConverters.seqAsJavaListConverter
 import scala.io.BufferedSource
 
 class DefaultSource extends DataSourceV2 with ReadSupport {
+
+    val logger: Logger = LogManager.getLogger( this.getClass.getName )
+    logger.info(s"Using ${BuildInfo.name} version ${BuildInfo.version} built at ${BuildInfo.buildDate}")
 
     override def createReader(options: DataSourceOptions): DataSourceReader = {
 
