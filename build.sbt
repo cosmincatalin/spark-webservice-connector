@@ -31,7 +31,7 @@ libraryDependencies ++= {
 scalacOptions ++= Seq("-feature", "-deprecation")
 
 
-gpgOptions := Seq(s"--yes", "--no-tty", "--pinentry", "loopback", "--batch", "--passphrase", sys.env.getOrElse("PGP_PASSPHRASE", ""))
+gpgOptions := Seq(s"--yes", "--no-tty", "--pinentry", "loopback", "--batch", "--passphrase", sys.env.getOrElse("GPG_PASSPHRASE", ""))
 
 lazy val root = (project in file(".")).
   enablePlugins(BuildInfoPlugin).
