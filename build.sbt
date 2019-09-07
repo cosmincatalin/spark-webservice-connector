@@ -30,6 +30,9 @@ libraryDependencies ++= {
 
 scalacOptions ++= Seq("-feature", "-deprecation")
 
+
+gpgOptions := Seq(s"--yes", "--no-tty", "--pinentry", "loopback", "--batch", "--passphrase", sys.env.getOrElse("PGP_PASSPHRASE", ""))
+
 lazy val root = (project in file(".")).
   enablePlugins(BuildInfoPlugin).
   settings(
@@ -58,17 +61,6 @@ publishTo := {
     else
         Some("releases"  at nexus + "service/local/staging/deploy/maven2")
 }
-
-val publishSnapshot:Command = Command.command("publishSnapshot") { state =>
-    val extracted = Project extract state
-    import extracted._
-    val currentVersion = getOpt(version).get
-    val newState = extracted.appendWithoutSession(Seq(version := s"$currentVersion-SNAPSHOT"), state)
-    Project.extract(newState).runTask(PgpKeys.publishSigned in Compile, newState)
-    state
-}
-
-commands ++= Seq(publishSnapshot)
 
 pomExtra := <url>https://github.com/cosmincatalin/spark-webservice-connector</url>
   <licenses>

@@ -1,6 +1,9 @@
 name: CI
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   build:
@@ -10,9 +13,9 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: sbt to Maven Central
-      uses: cosmincatalin/sbt-to-maven-central@v1.0.0-2
+      uses: cosmincatalin/sbt-to-maven-central@v1.0.0
       env:
         NEXUS_USER: ${{ secrets.NEXUS_USER }}
         NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
-        NEXUS_PK: ${{ secrets.NEXUS_PK }}
-        NEXUS_PASSPHRASE: ${{ secrets.NEXUS_PASSPHRASE }}
+        GPG_PK: ${{ secrets.GPG_PK }}
+        GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
