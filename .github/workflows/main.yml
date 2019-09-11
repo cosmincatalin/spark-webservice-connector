@@ -13,7 +13,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: sbt to Maven Central
-      uses: cosmincatalin/sbt-to-maven-central@v1.0.4
+      uses: cosmincatalin/sbt-to-maven-central@v1.0.5
       env:
         NEXUS_USER: ${{ secrets.NEXUS_USER }}
         NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
