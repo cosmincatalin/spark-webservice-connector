@@ -32,6 +32,7 @@ scalacOptions ++= Seq("-feature", "-deprecation")
 
 
 gpgOptions := Seq(s"--yes", "--no-tty", "--pinentry", "loopback", "--batch", "--passphrase", sys.env.getOrElse("GPG_PASSPHRASE", ""))
+updateOptions := updateOptions.value.withGigahorse(false)
 
 lazy val root = (project in file(".")).
   enablePlugins(BuildInfoPlugin).

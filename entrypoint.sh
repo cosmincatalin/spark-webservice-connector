@@ -24,4 +24,4 @@ cat /dev/null > ~/.sbt/1.0/plugins/plugins.sbt
   echo 'addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "2.5")'
 } >> ~/.sbt/1.0/plugins/plugins.sbt
 
-sbt +publish
+sbt --debug +publish
